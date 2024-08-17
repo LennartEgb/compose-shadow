@@ -35,6 +35,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(project(":lib"))
         }
 
         androidMain.dependencies {
@@ -77,8 +78,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
@@ -86,9 +87,6 @@ android {
     dependencies {
         debugImplementation(compose.uiTooling)
     }
-}
-dependencies {
-    implementation(project(":lib"))
 }
 
 compose.desktop {
