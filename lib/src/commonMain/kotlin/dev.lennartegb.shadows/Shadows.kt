@@ -99,15 +99,6 @@ private fun Canvas.inset(outline: Outline, color: Color) {
     saveLayer(outline.bounds, filterPaint)
 }
 
-private fun Density.createBlurPaint(blurRadius: Dp, color: Color): Paint {
-    val paint = Paint().asFrameworkPaint()
-    if (blurRadius.value > 0f) {
-        paint.setMaskFilter(blurRadius.toPx(), blurMode = BlurMode.NORMAL)
-    }
-    paint.color = color.toArgb()
-    return paint.asComposePaint()
-}
-
 private fun Size.plus(width: Float, height: Float): Size =
     Size(this.width + width, this.height + height)
 

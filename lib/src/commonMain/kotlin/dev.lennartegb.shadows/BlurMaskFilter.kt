@@ -1,6 +1,9 @@
 package dev.lennartegb.shadows
 
-import androidx.compose.ui.graphics.NativePaint
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 
 internal enum class BlurMode {
     /** fuzzy inside and outside  */
@@ -16,4 +19,8 @@ internal enum class BlurMode {
     INNER;
 }
 
-internal expect fun NativePaint.setMaskFilter(blurRadius: Float, blurMode: BlurMode)
+internal expect fun Density.createBlurPaint(
+    blurRadius: Dp,
+    color: Color,
+    blurMode: BlurMode = BlurMode.NORMAL,
+): Paint
