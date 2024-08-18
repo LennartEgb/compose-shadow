@@ -12,15 +12,9 @@ import androidx.compose.ui.unit.Dp
 internal actual fun Density.createBlurPaint(
     blurRadius: Dp,
     color: Color,
-    blurMode: BlurMode,
 ): Paint = Paint().asFrameworkPaint().apply {
     if (blurRadius.value > 0f) {
-        val style = when (blurMode) {
-            BlurMode.NORMAL -> Blur.NORMAL
-            BlurMode.SOLID -> Blur.SOLID
-            BlurMode.OUTER -> Blur.OUTER
-            BlurMode.INNER -> Blur.INNER
-        }
+        val style = Blur.NORMAL
         this.maskFilter = BlurMaskFilter(blurRadius.toPx(), style)
     }
     this.color = color.toArgb()

@@ -10,19 +10,12 @@ import androidx.compose.ui.unit.Dp
 import org.jetbrains.skia.FilterBlurMode
 import org.jetbrains.skia.MaskFilter
 
-internal actual fun Density.createBlurPaint(
-    blurRadius: Dp,
-    color: Color,
-    blurMode: BlurMode,
-): Paint = Paint().asFrameworkPaint().apply {
-    if (blurRadius.value > 0f) {
-        val mode = when (blurMode) {
-            BlurMode.NORMAL -> FilterBlurMode.NORMAL
-            BlurMode.SOLID -> FilterBlurMode.SOLID
-            BlurMode.OUTER -> FilterBlurMode.OUTER
-            BlurMode.INNER -> FilterBlurMode.INNER
+internal actual fun Density.createBlurPaint(blurRadius: Dp, color: Color): Paint = Paint()
+    .asFrameworkPaint().apply {
+        if (blurRadius.value > 0f) {
+            val mode = FilterBlurMode.NORMAL
+            val sigma = blurRadius.toPx() / 2
+            this.maskFilter = MaskFilter.makeBlur(mode = mode, sigma = sigma)
         }
-        this.maskFilter = MaskFilter.makeBlur(mode = mode, sigma = blurRadius.toPx() / 2)
-    }
-    this.color = color.toArgb()
-}.asComposePaint()
+        this.color = color.toArgb()
+    }.asComposePaint()
