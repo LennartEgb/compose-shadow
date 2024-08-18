@@ -25,9 +25,12 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
 
+// NOTE: Default color is used from default settings of drop shadow in Figma
+private val defaultColor: Color get() = Color.Black.copy(alpha = .25f)
+
 public fun Modifier.boxShadow(
     blurRadius: Dp,
-    color: Color = Color.Black.copy(alpha = .2F),
+    color: Color = defaultColor,
     spreadRadius: Dp = 0.dp,
     offset: DpOffset = DpOffset.Zero,
     shape: Shape = RectangleShape,
