@@ -1,8 +1,10 @@
 package dev.lennartegb.shadows
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.CacheDrawScope
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
@@ -13,12 +15,9 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.asComposePaint
 import androidx.compose.ui.graphics.drawOutline
-import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.isSpecified
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.withSave
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -35,55 +34,49 @@ public fun Modifier.boxShadow(
     clip: Boolean = true,
     inset: Boolean = false,
 ): Modifier {
-    require(color.isSpecified) { "color must be specified." }
     require(blurRadius.isSpecified) { "blurRadius must be specified." }
-    require(spreadRadius.isSpecified) { "spreadRadius must be specified." }
     require(blurRadius.value >= 0f) { "blurRadius can't be negative." }
+    require(color.isSpecified) { "color must be specified." }
+    require(spreadRadius.isSpecified) { "spreadRadius must be specified." }
     require(offset.isSpecified) { "offset must be specified." }
 
     val shadowModifier = drawWithCache {
         onDrawWithContent {
             if (inset) drawContent()
-            drawShadow(
-                blurRadius = blurRadius,
-                spreadRadius = spreadRadius,
-                inset = inset,
-                shape = shape,
-                color = color,
-                offset = offset,
-            )
+            drawIntoCanvas { canvas ->
+                val spreadSize = spreadRadius.toPx()
+                    .times(other = 2)
+                    .let { if (inset) -it else it }
+                    .let(::Size)
+
+                canvas.withSave {
+                    if (inset) canvas.inset(outline = shape.createOutline(size), color = color)
+
+                    canvas.translate((offset - spreadRadius).toOffset())
+
+                    val shadowOutline = shape.createOutline(size = size + spreadSize)
+                    canvas.drawShadow(
+                        outline = shadowOutline,
+                        blurRadius = blurRadius,
+                        color = color
+                    )
+                }
+            }
             if (!inset) drawContent()
         }
     }
     return if (clip) shadowModifier.clip(shape) else shadowModifier
 }
 
-private fun ContentDrawScope.drawShadow(
-    blurRadius: Dp,
-    spreadRadius: Dp,
-    inset: Boolean,
-    shape: Shape,
-    color: Color,
-    offset: DpOffset,
-) {
-    drawIntoCanvas { canvas ->
-        val spreadRadiusPx = spreadRadius.toPx().let { if (inset) -it else it }
-        val density = Density(density = density, fontScale = fontScale)
-        val shadowSize = size.plus(width = spreadRadiusPx * 2, height = spreadRadiusPx * 2)
+context(Density)
+private fun Canvas.drawShadow(outline: Outline, blurRadius: Dp, color: Color) {
+    drawOutline(outline = outline, paint = createBlurPaint(blurRadius, color))
+}
 
-        canvas.withSave {
-            if (inset) canvas.inset(
-                outline = shape.createOutline(size, layoutDirection, density),
-                color = color
-            )
-            canvas.translate(
-                dx = offset.x.toPx() - spreadRadiusPx,
-                dy = offset.y.toPx() - spreadRadiusPx
-            )
-            val outline = shape.createOutline(shadowSize, layoutDirection, density)
-            canvas.drawOutline(outline = outline, paint = createBlurPaint(blurRadius, color))
-        }
-    }
+context(CacheDrawScope)
+private fun Shape.createOutline(size: Size): Outline {
+    val density = Density(density, fontScale)
+    return createOutline(size = size, layoutDirection = layoutDirection, density = density)
 }
 
 private fun Canvas.inset(outline: Outline, color: Color) {
@@ -99,8 +92,10 @@ private fun Canvas.inset(outline: Outline, color: Color) {
     saveLayer(outline.bounds, filterPaint)
 }
 
-private fun Size.plus(width: Float, height: Float): Size =
-    Size(this.width + width, this.height + height)
+private operator fun Size.plus(size: Size): Size =
+    Size(this.width + size.width, this.height + size.height)
+
+private fun Size(all: Float): Size = Size(width = all, height = all)
 
 private fun ColorMatrix.shiftAlpha(value: Float): Unit = set(row = 3, column = 4, v = value)
 
@@ -117,4 +112,15 @@ private fun Canvas.clip(outline: Outline) {
         is Outline.Rectangle -> clipRect(rect = outline.rect)
         is Outline.Rounded -> clipPath(path = Path().apply { addRoundRect(outline.roundRect) })
     }
+}
+
+context(Density)
+private fun DpOffset.toOffset(): Offset = Offset(x.toPx(), y.toPx())
+
+private fun Canvas.translate(offset: Offset) {
+    translate(dx = offset.x, dy = offset.y)
+}
+
+private operator fun DpOffset.minus(value: Dp): DpOffset {
+    return DpOffset(x = x - value, y = y - value)
 }
