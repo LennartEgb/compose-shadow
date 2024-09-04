@@ -7,5 +7,5 @@ import androidx.compose.ui.unit.DpSize
 data class BoxValues(
     val size: DpSize,
     val shape: Shape,
-    val color: Color
+    val color: Color,
 )

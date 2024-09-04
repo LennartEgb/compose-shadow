@@ -3,8 +3,13 @@ package dev.lennartegb.shadows
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.SpaceEvenly
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -45,9 +50,11 @@ fun ShapeSelector(
                 selected = shape == selected,
                 strokeWidth = strokeWidth,
             )
-            if (index != shapes.lastIndex) Box(
-                modifier = Modifier.width(strokeWidth).height(24.dp).background(color)
-            )
+            if (index != shapes.lastIndex) {
+                Box(
+                    modifier = Modifier.width(strokeWidth).height(24.dp).background(color),
+                )
+            }
         }
     }
 }

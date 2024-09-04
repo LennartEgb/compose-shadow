@@ -1,11 +1,27 @@
 package dev.lennartegb.shadows
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
@@ -15,12 +31,26 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.*
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -54,14 +84,14 @@ fun DetailScreen(modifier: Modifier = Modifier) {
                 onBoxColorChange = { changesBoxColor = true },
                 onShadowColorChange = { changesShadowColor = true },
             )
-        }
+        },
     ) { paddingValues ->
         Box(Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Center) {
             Box(
                 modifier = Modifier
                     .size(appState.boxValues.size)
                     .boxShadow(appState.shadowValues)
-                    .background(appState.boxValues.color, shape = appState.boxValues.shape)
+                    .background(appState.boxValues.color, shape = appState.boxValues.shape),
             )
         }
     }
@@ -73,7 +103,7 @@ fun DetailScreen(modifier: Modifier = Modifier) {
                 appState.boxColor(it)
                 changesBoxColor = false
             },
-            onDismiss = { changesBoxColor = false }
+            onDismiss = { changesBoxColor = false },
         )
     }
 
@@ -84,7 +114,7 @@ fun DetailScreen(modifier: Modifier = Modifier) {
                 appState.shadowColor(it)
                 changesShadowColor = false
             },
-            onDismiss = { changesShadowColor = false }
+            onDismiss = { changesShadowColor = false },
         )
     }
 }
@@ -101,7 +131,7 @@ fun ColorPickerDialog(
         Column(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = CenterHorizontally,
-            verticalArrangement = spacedBy(16.dp)
+            verticalArrangement = spacedBy(16.dp),
         ) {
             val (internalColor, setColor) = remember { mutableStateOf(color) }
             val controller = rememberColorPickerController()
@@ -150,7 +180,7 @@ fun PaneScaffold(
                 content(PaddingValues())
                 Surface(
                     modifier = Modifier.fillMaxHeight().widthIn(max = maxWidthControls),
-                    color = controlsBackground
+                    color = controlsBackground,
                 ) {
                     Column(horizontalAlignment = Alignment.End) {
                         IconButton(onClick = { controlsExpanded = !controlsExpanded }) {
@@ -174,7 +204,7 @@ fun PaneScaffold(
             Row(modifier = modifier.background(background), horizontalArrangement = Arrangement.SpaceEvenly) {
                 Surface(
                     modifier = Modifier.fillMaxHeight().widthIn(max = maxWidthControls),
-                    color = controlsBackground
+                    color = controlsBackground,
                 ) {
                     controls()
                 }
@@ -220,7 +250,7 @@ private fun ControlsSheet(
                     "Shape",
                     selected = shape,
                     shapes = shapes,
-                    onShapeSelect = state::boxShape
+                    onShapeSelect = state::boxShape,
                 )
             }
 
@@ -253,7 +283,7 @@ private fun ControlsSheet(
                     title = "Shape",
                     selected = shape,
                     shapes = shapes,
-                    onShapeSelect = state::shadowShape
+                    onShapeSelect = state::shadowShape,
                 )
             }
             item {
@@ -261,7 +291,7 @@ private fun ControlsSheet(
                     "Clip",
                     checked = clip,
                     onCheckedChange = state::switchClip,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
             item {
@@ -269,7 +299,7 @@ private fun ControlsSheet(
                     "Inset",
                     checked = inset,
                     onCheckedChange = state::switchInset,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }
@@ -283,7 +313,7 @@ private fun LazyListScope.colorPicker(color: Color, onColorChange: () -> Unit) =
         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).clip(RoundedCornerShape(4.dp))
             .clickable(onClick = onColorChange),
         verticalAlignment = CenterVertically,
-        horizontalArrangement = SpaceBetween
+        horizontalArrangement = SpaceBetween,
     ) {
         Text("Color")
         Box(Modifier.size(24.dp).background(color))
@@ -300,7 +330,7 @@ fun ShapeSelectorSection(
     selected: Shape,
     shapes: List<Shape>,
     onShapeSelect: (Shape) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
         Text(title)
@@ -308,7 +338,7 @@ fun ShapeSelectorSection(
             modifier = Modifier.fillMaxWidth(),
             selected = selected,
             onShapeSelect = onShapeSelect,
-            shapes = shapes
+            shapes = shapes,
         )
     }
 }
@@ -324,7 +354,6 @@ fun SwitchSection(title: String, checked: Boolean, onCheckedChange: (Boolean) ->
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
-
 
 @Composable
 fun DpSliderSection(title: String, dp: Dp, onDpChange: (Dp) -> Unit, modifier: Modifier = Modifier, min: Dp = 0.dp) {

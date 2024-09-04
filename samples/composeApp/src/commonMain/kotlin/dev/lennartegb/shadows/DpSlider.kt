@@ -12,7 +12,7 @@ fun DpSlider(
     onDpChange: (Dp) -> Unit,
     max: Dp = 100.dp,
     min: Dp = 0.dp,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Slider(
         modifier = modifier,
