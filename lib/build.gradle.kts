@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.binaryCompatibility)
+    alias(libs.plugins.ktlint)
 }
 
 kotlin {

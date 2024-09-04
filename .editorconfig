@@ -1,0 +1,10 @@
+root = true
+
+[*.{kt,kts}]
+ktlint_code_style = intellij_idea
+ktlint_standard_multiline-expression-wrapping = disabled
+ktlint_standard_string-template-indent = disabled
+
+insert_final_newline = true
+ij_kotlin_name_count_to_use_star_import = 1024
+ij_kotlin_name_count_to_use_star_import_for_members = 1024

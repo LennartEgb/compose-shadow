@@ -7,5 +7,15 @@
             "tasks": ["run", "desktopRun"],
             "args": ["-DmainClass=MainKt", "--quiet"],
         },
+        {
+            "name": "Ktlint Check",
+            "type": "gradle",
+            "tasks": ["ktlintCheck"],
+        },
+        {
+            "name": "Ktlint Format",
+            "type": "gradle",
+            "tasks": ["ktlintFormat"],
+        },
     ]
 }
