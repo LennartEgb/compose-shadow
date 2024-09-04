@@ -68,6 +68,10 @@ internal class AppState(shadowValues: ShadowValues = DefaultShadowValues) {
         shadowValues = shadowValues.copy(offset = shadowValues.offset.copy(y = offset))
     }
 
+    fun shadowColor(color: Color) {
+        shadowValues = shadowValues.copy(color = color)
+    }
+
     fun boxWidth(dp: Dp) {
         boxValues = boxValues.copy(size = boxValues.size.copy(width = dp))
     }
@@ -78,5 +82,9 @@ internal class AppState(shadowValues: ShadowValues = DefaultShadowValues) {
 
     fun boxShape(shape: Shape) {
         boxValues = boxValues.copy(shape = shape)
+    }
+
+    fun boxColor(color: Color) {
+        boxValues = boxValues.copy(color = color)
     }
 }

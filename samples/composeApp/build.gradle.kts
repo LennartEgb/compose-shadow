@@ -37,6 +37,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.windowSizeClass)
+            implementation(libs.colorpicker)
         }
 
         androidMain.dependencies {

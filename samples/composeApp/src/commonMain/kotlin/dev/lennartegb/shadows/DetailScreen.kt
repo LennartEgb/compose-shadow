@@ -2,6 +2,7 @@ package dev.lennartegb.shadows
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.spacedBy
@@ -22,12 +23,17 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.github.skydoves.colorpicker.compose.HsvColorPicker
+import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Preview
@@ -35,6 +41,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun DetailScreen(modifier: Modifier = Modifier) {
     val appState = rememberAppState()
     val listState = rememberLazyListState()
+    var changesBoxColor by remember { mutableStateOf(false) }
+    var changesShadowColor by remember { mutableStateOf(false) }
+
     PaneScaffold(
         modifier = modifier,
         controls = {
@@ -42,6 +51,8 @@ fun DetailScreen(modifier: Modifier = Modifier) {
                 state = appState,
                 listState = listState,
                 contentPadding = PaddingValues(16.dp),
+                onBoxColorChange = { changesBoxColor = true },
+                onShadowColorChange = { changesShadowColor = true },
             )
         }
     ) { paddingValues ->
@@ -52,6 +63,60 @@ fun DetailScreen(modifier: Modifier = Modifier) {
                     .boxShadow(appState.shadowValues)
                     .background(appState.boxValues.color, shape = appState.boxValues.shape)
             )
+        }
+    }
+
+    AnimatedVisibility(changesBoxColor) {
+        ColorPickerDialog(
+            color = appState.boxValues.color,
+            onColorChanged = {
+                appState.boxColor(it)
+                changesBoxColor = false
+            },
+            onDismiss = { changesBoxColor = false }
+        )
+    }
+
+    AnimatedVisibility(changesShadowColor) {
+        ColorPickerDialog(
+            color = appState.shadowValues.color,
+            onColorChanged = {
+                appState.shadowColor(it)
+                changesShadowColor = false
+            },
+            onDismiss = { changesShadowColor = false }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ColorPickerDialog(
+    color: Color,
+    onColorChanged: (Color) -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BasicAlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = CenterHorizontally,
+            verticalArrangement = spacedBy(16.dp)
+        ) {
+            val (internalColor, setColor) = remember { mutableStateOf(color) }
+            val controller = rememberColorPickerController()
+            HsvColorPicker(
+                modifier = Modifier.size(200.dp),
+                controller = controller,
+                initialColor = internalColor,
+                onColorChanged = { envelope ->
+                    setColor(envelope.color)
+                },
+            )
+
+            Button(onClick = { onColorChanged(internalColor) }) {
+                Text("Submit")
+            }
         }
     }
 }
@@ -107,7 +172,10 @@ fun PaneScaffold(
 
         WindowWidthSizeClass.Expanded -> {
             Row(modifier = modifier.background(background), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Surface(modifier = Modifier.fillMaxHeight().widthIn(max = maxWidthControls), color = controlsBackground) {
+                Surface(
+                    modifier = Modifier.fillMaxHeight().widthIn(max = maxWidthControls),
+                    color = controlsBackground
+                ) {
                     controls()
                 }
                 content(PaddingValues())
@@ -125,6 +193,8 @@ private fun ControlsSheet(
     verticalArrangement: Arrangement.Vertical = spacedBy(4.dp),
     listState: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(),
+    onBoxColorChange: () -> Unit,
+    onShadowColorChange: () -> Unit,
 ) {
     LazyColumn(
         modifier = modifier,
@@ -154,7 +224,7 @@ private fun ControlsSheet(
                 )
             }
 
-            item { Text("Color") }
+            colorPicker(color, onBoxColorChange)
         }
 
         divider()
@@ -164,7 +234,7 @@ private fun ControlsSheet(
             dpSliderSection("Blur Radius", dp = blurRadius, onDpChange = state::blur)
             dpSliderSection("Spread Radius", dp = spreadRadius, onDpChange = state::spread)
 
-            colorPicker()
+            colorPicker(color, onShadowColorChange)
 
             item {
                 DualDpSliderSection(
@@ -188,7 +258,7 @@ private fun ControlsSheet(
             }
             item {
                 SwitchSection(
-                    "Clip switch",
+                    "Clip",
                     checked = clip,
                     onCheckedChange = state::switchClip,
                     modifier = Modifier.fillMaxWidth()
@@ -208,7 +278,18 @@ private fun ControlsSheet(
 
 private fun LazyListScope.title(text: String) = item { Title(text) }
 private fun LazyListScope.divider() = item { HorizontalDivider() }
-private fun LazyListScope.colorPicker() = item { Text("Color") }
+private fun LazyListScope.colorPicker(color: Color, onColorChange: () -> Unit) = item {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).clip(RoundedCornerShape(4.dp))
+            .clickable(onClick = onColorChange),
+        verticalAlignment = CenterVertically,
+        horizontalArrangement = SpaceBetween
+    ) {
+        Text("Color")
+        Box(Modifier.size(24.dp).background(color))
+    }
+}
+
 private fun LazyListScope.dpSliderSection(title: String, dp: Dp, onDpChange: (Dp) -> Unit, min: Dp = 0.dp) = item {
     DpSliderSection(title = title, dp = dp, onDpChange = onDpChange, min = min)
 }
