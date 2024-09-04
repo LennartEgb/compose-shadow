@@ -12,11 +12,13 @@ import org.jetbrains.skia.MaskFilter
 internal actual fun Density.createBlurPaint(
     blurRadius: Dp,
     color: Color,
-): Paint = Paint().asFrameworkPaint().apply {
-    if (blurRadius.value > 0f) {
-        val mode = FilterBlurMode.NORMAL
-        val sigma = blurRadius.toPx() / 2
-        this.maskFilter = MaskFilter.makeBlur(mode = mode, sigma = sigma)
-    }
-    this.color = color.toArgb()
-}.asComposePaint()
+): Paint {
+    return Paint().asFrameworkPaint().apply {
+        if (blurRadius.value > 0f) {
+            val mode = FilterBlurMode.NORMAL
+            val sigma = blurRadius.toPx() / 2
+            this.maskFilter = MaskFilter.makeBlur(mode = mode, sigma = sigma)
+        }
+        this.color = color.toArgb()
+    }.asComposePaint()
+}

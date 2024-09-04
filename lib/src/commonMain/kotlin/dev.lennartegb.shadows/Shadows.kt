@@ -47,10 +47,11 @@ public fun Modifier.boxShadow(
         onDrawWithContent {
             if (inset) drawContent()
             drawIntoCanvas { canvas ->
-                val spreadSize = spreadRadius.toPx()
-                    .times(other = 2)
-                    .let { if (inset) -it else it }
-                    .let(::Size)
+                val spreadSize =
+                    spreadRadius.toPx()
+                        .times(other = 2)
+                        .let { if (inset) -it else it }
+                        .let(::Size)
 
                 canvas.withSave {
                     if (inset) canvas.inset(outline = shape.createOutline(size), color = color)
@@ -61,7 +62,7 @@ public fun Modifier.boxShadow(
                     canvas.drawShadow(
                         outline = shadowOutline,
                         blurRadius = blurRadius,
-                        color = color
+                        color = color,
                     )
                 }
             }
@@ -72,7 +73,11 @@ public fun Modifier.boxShadow(
 }
 
 context(Density)
-private fun Canvas.drawShadow(outline: Outline, blurRadius: Dp, color: Color) {
+private fun Canvas.drawShadow(
+    outline: Outline,
+    blurRadius: Dp,
+    color: Color,
+) {
     drawOutline(outline = outline, paint = createBlurPaint(blurRadius, color))
 }
 
@@ -82,21 +87,24 @@ private fun Shape.createOutline(size: Size): Outline {
     return createOutline(size = size, layoutDirection = layoutDirection, density = density)
 }
 
-private fun Canvas.inset(outline: Outline, color: Color) {
+private fun Canvas.inset(
+    outline: Outline,
+    color: Color,
+) {
     clip(outline)
 
-    val colorMatrix = ColorMatrix().apply {
-        setScale(alphaScale = -1f)
-        shiftAlpha(255f * color.alpha)
-    }
+    val colorMatrix =
+        ColorMatrix().apply {
+            setScale(alphaScale = -1f)
+            shiftAlpha(255f * color.alpha)
+        }
     val colorFilter = ColorFilter.colorMatrix(colorMatrix)
     val filterPaint = Paint().apply { this.colorFilter = colorFilter }
 
     saveLayer(outline.bounds, filterPaint)
 }
 
-private operator fun Size.plus(size: Size): Size =
-    Size(this.width + size.width, this.height + size.height)
+private operator fun Size.plus(size: Size): Size = Size(width + size.width, height + size.height)
 
 private fun Size(all: Float): Size = Size(width = all, height = all)
 
@@ -124,6 +132,4 @@ private fun Canvas.translate(offset: Offset) {
     translate(dx = offset.x, dy = offset.y)
 }
 
-private operator fun DpOffset.minus(value: Dp): DpOffset {
-    return DpOffset(x = x - value, y = y - value)
-}
+private operator fun DpOffset.minus(value: Dp): DpOffset = DpOffset(x = x - value, y = y - value)
