@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:filename")
+
 package dev.lennartegb.shadows
 
 import androidx.compose.ui.window.Window
