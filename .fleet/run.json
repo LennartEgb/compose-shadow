@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "name": "Desktop",
+            "workingDir": "$PROJECT_DIR$",
+            "type": "gradle",
+            "tasks": ["run", "desktopRun"],
+            "args": ["-DmainClass=MainKt", "--quiet"],
+        },
+    ]
+}
