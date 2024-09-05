@@ -1,5 +1,5 @@
 public final class dev/lennartegb/shadows/ShadowsKt {
-	public static final fun dev.lennartegb.shadows.boxShadow-BzIalO8 (Landroidx/compose/ui/Modifier;FJFJLandroidx/compose/ui/graphics/Shape;ZZ)Landroidx/compose/ui/Modifier;
-	public static synthetic fun dev.lennartegb.shadows.boxShadow-BzIalO8$default (Landroidx/compose/ui/Modifier;FJFJLandroidx/compose/ui/graphics/Shape;ZZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun boxShadow-BzIalO8 (Landroidx/compose/ui/Modifier;FJFJLandroidx/compose/ui/graphics/Shape;ZZ)Landroidx/compose/ui/Modifier;
+	public static synthetic fun boxShadow-BzIalO8$default (Landroidx/compose/ui/Modifier;FJFJLandroidx/compose/ui/graphics/Shape;ZZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 }
 
