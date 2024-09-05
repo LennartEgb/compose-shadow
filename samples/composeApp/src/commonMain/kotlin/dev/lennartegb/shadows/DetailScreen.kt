@@ -225,6 +225,7 @@ private fun ControlsSheet(
     contentPadding: PaddingValues = PaddingValues(),
     onBoxColorChange: () -> Unit,
     onShadowColorChange: () -> Unit,
+    maxBoxSize: Dp = 200.dp,
 ) {
     LazyColumn(
         modifier = modifier,
@@ -243,6 +244,8 @@ private fun ControlsSheet(
                     secondTitle = "Height",
                     secondDp = size.height,
                     onSecondDpChange = state::boxHeight,
+                    min = 10.dp,
+                    max = maxBoxSize,
                 )
             }
             item {
@@ -261,12 +264,19 @@ private fun ControlsSheet(
 
         title(text = "Shadow")
         with(state.shadowValues) {
-            dpSliderSection("Blur Radius", dp = blurRadius, onDpChange = state::blur)
-            dpSliderSection("Spread Radius", dp = spreadRadius, onDpChange = state::spread)
+            dpSliderSection("Blur Radius", dp = blurRadius, onDpChange = state::blur, max = maxBoxSize, min = 0.dp)
+            dpSliderSection(
+                "Spread Radius",
+                dp = spreadRadius,
+                onDpChange = state::spread,
+                max = maxBoxSize,
+                min = 0.dp
+            )
 
             colorPicker(color, onShadowColorChange)
 
             item {
+                val maxOffset = 50.dp
                 DualDpSliderSection(
                     title = "Offset",
                     firstTitle = "X",
@@ -275,6 +285,8 @@ private fun ControlsSheet(
                     secondTitle = "Y",
                     secondDp = offset.y,
                     onSecondDpChange = state::offsetY,
+                    min = -maxOffset,
+                    max = maxOffset,
                 )
             }
 
@@ -320,8 +332,8 @@ private fun LazyListScope.colorPicker(color: Color, onColorChange: () -> Unit) =
     }
 }
 
-private fun LazyListScope.dpSliderSection(title: String, dp: Dp, onDpChange: (Dp) -> Unit, min: Dp = 0.dp) = item {
-    DpSliderSection(title = title, dp = dp, onDpChange = onDpChange, min = min)
+private fun LazyListScope.dpSliderSection(title: String, dp: Dp, onDpChange: (Dp) -> Unit, min: Dp, max: Dp) = item {
+    DpSliderSection(title = title, dp = dp, onDpChange = onDpChange, min = min, max = max)
 }
 
 @Composable
@@ -356,10 +368,10 @@ fun SwitchSection(title: String, checked: Boolean, onCheckedChange: (Boolean) ->
 }
 
 @Composable
-fun DpSliderSection(title: String, dp: Dp, onDpChange: (Dp) -> Unit, modifier: Modifier = Modifier, min: Dp = 0.dp) {
+fun DpSliderSection(title: String, dp: Dp, onDpChange: (Dp) -> Unit, min: Dp, max: Dp, modifier: Modifier = Modifier) {
     Column(modifier) {
         Text(title)
-        DpSlider(dp, onDpChange, min = min)
+        DpSlider(dp, onDpChange, min = min, max = max)
     }
 }
 
@@ -372,6 +384,8 @@ fun DualDpSliderSection(
     secondTitle: String,
     secondDp: Dp,
     onSecondDpChange: (Dp) -> Unit,
+    min: Dp,
+    max: Dp,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
@@ -381,6 +395,7 @@ fun DualDpSliderSection(
             onFirstDpChange(dp)
             onSecondDpChange(dp)
         }
+        val optionalLockedChange = lockedChange.takeIf { locked }
 
         Row(verticalAlignment = CenterVertically, horizontalArrangement = spacedBy(8.dp)) {
             Text(text = title)
@@ -388,13 +403,27 @@ fun DualDpSliderSection(
             Text("Locked", style = MaterialTheme.typography.labelSmall)
             Switch(checked = locked, onCheckedChange = setLocked)
         }
+        val titleModifier = Modifier.weight(1f)
+        val sliderModifier = Modifier.weight(3f)
         Row(verticalAlignment = CenterVertically) {
-            Text(firstTitle)
-            DpSlider(dp = firstDp, onDpChange = lockedChange.takeIf { locked } ?: onFirstDpChange)
+            Text(modifier = titleModifier, text = firstTitle)
+            DpSlider(
+                modifier = sliderModifier,
+                dp = firstDp,
+                onDpChange = optionalLockedChange ?: onFirstDpChange,
+                max = max,
+                min = min,
+            )
         }
         Row(verticalAlignment = CenterVertically) {
-            Text(secondTitle)
-            DpSlider(dp = secondDp, onDpChange = lockedChange.takeIf { locked } ?: onSecondDpChange)
+            Text(modifier = titleModifier, text = secondTitle)
+            DpSlider(
+                modifier = sliderModifier,
+                dp = secondDp,
+                onDpChange = optionalLockedChange ?: onSecondDpChange,
+                max = max,
+                min = min,
+            )
         }
     }
 }

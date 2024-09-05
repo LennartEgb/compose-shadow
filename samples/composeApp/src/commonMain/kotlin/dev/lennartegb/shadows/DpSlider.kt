@@ -10,8 +10,8 @@ import androidx.compose.ui.unit.dp
 fun DpSlider(
     dp: Dp,
     onDpChange: (Dp) -> Unit,
-    max: Dp = 100.dp,
-    min: Dp = 0.dp,
+    max: Dp,
+    min: Dp,
     modifier: Modifier = Modifier,
 ) {
     Slider(
