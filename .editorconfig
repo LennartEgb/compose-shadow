@@ -1,5 +1,6 @@
 root = true
 
+# noinspection EditorConfigKeyCorrectness
 [*.{kt,kts}]
 ktlint_code_style = intellij_idea
 ktlint_standard_multiline-expression-wrapping = disabled
@@ -9,3 +10,7 @@ ktlint_function_naming_ignore_when_annotated_with=Composable
 insert_final_newline = true
 ij_kotlin_name_count_to_use_star_import = 1024
 ij_kotlin_name_count_to_use_star_import_for_members = 1024
+
+[*.{yaml,yml}]
+indent_style = space
+indent_size = 2
