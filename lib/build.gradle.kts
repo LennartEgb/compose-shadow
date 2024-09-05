@@ -1,3 +1,6 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.util.*
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -5,6 +8,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.binaryCompatibility)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.publish)
 }
 
 kotlin {
@@ -73,3 +77,23 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
     }
 }
+
+val localProperties = gradleLocalProperties(rootDir, providers)
+
+publishing {
+    repositories {
+        maven {
+            name = "githubPackages"
+            url = uri("https://maven.pkg.github.com/lennartegb/compose-shadow")
+            credentials {
+                username = localProperties["githubPackagesUsername"] as? String
+                password = localProperties["githubPackagesPassword"] as? String
+            }
+        }
+    }
+}
+
+mavenPublishing {
+    coordinates("dev.lennartegb.compose", "shadow", "0.1.0")
+}
+

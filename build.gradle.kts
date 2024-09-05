@@ -8,4 +8,5 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.binaryCompatibility) apply false
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.publish) apply false
 }
