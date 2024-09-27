@@ -1,0 +1,22 @@
+name: Publish package to the
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: action/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Setup gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Create local.properties file
+        run: sh ./scripts/env-to-local-props.sh
+      - name: Publish package
+        run: ./gradlew publishAllPublicationsToGithubPackagesRepository
