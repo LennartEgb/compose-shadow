@@ -54,12 +54,20 @@ public fun Modifier.boxShadow(
                         .let(::Size)
 
                 canvas.withSave {
-                    if (inset) canvas.inset(outline = shape.createOutline(size), color = color)
+                    val scope = this@drawWithCache
+                    if (inset) {
+                        canvas.inset(
+                            outline = shape.createOutline(scope = scope, size = size),
+                            color = color,
+                        )
+                    }
 
-                    canvas.translate((offset - spreadRadius).toOffset())
+                    val density = Density(density = density, fontScale = fontScale)
+                    canvas.translate((offset - spreadRadius).toOffset(density = density))
 
-                    val shadowOutline = shape.createOutline(size = size + spreadSize)
+                    val shadowOutline = shape.createOutline(scope = scope, size = size + spreadSize)
                     canvas.drawShadow(
+                        density = density,
                         outline = shadowOutline,
                         blurRadius = blurRadius,
                         color = color,
@@ -72,19 +80,18 @@ public fun Modifier.boxShadow(
     return if (clip) shadowModifier.clip(shape) else shadowModifier
 }
 
-context(Density)
 private fun Canvas.drawShadow(
+    density: Density,
     outline: Outline,
     blurRadius: Dp,
     color: Color,
 ) {
-    drawOutline(outline = outline, paint = createBlurPaint(blurRadius, color))
+    drawOutline(outline = outline, paint = createBlurPaint(density, blurRadius, color))
 }
 
-context(CacheDrawScope)
-private fun Shape.createOutline(size: Size): Outline {
-    val density = Density(density, fontScale)
-    return createOutline(size = size, layoutDirection = layoutDirection, density = density)
+private fun Shape.createOutline(scope: CacheDrawScope, size: Size): Outline {
+    val density = Density(scope.density, scope.fontScale)
+    return createOutline(size = size, layoutDirection = scope.layoutDirection, density = density)
 }
 
 private fun Canvas.inset(
@@ -125,8 +132,9 @@ private fun Canvas.clip(outline: Outline) {
     }
 }
 
-context(Density)
-private fun DpOffset.toOffset(): Offset = Offset(x.toPx(), y.toPx())
+private fun DpOffset.toOffset(density: Density): Offset = with(density) {
+    Offset(x.toPx(), y.toPx())
+}
 
 private fun Canvas.translate(offset: Offset) {
     translate(dx = offset.x, dy = offset.y)
