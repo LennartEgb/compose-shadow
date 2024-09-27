@@ -1,10 +1,10 @@
 [versions]
-kotlin = "2.0.20-RC2"
+kotlin = "2.0.20"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
 agp = "8.5.2"
-androidx-activityCompose = "1.9.1"
+androidx-activityCompose = "1.9.2"
 androidx-lifecycle = "2.8.0"
 compose-plugin = "1.6.11"
 kotlinx-coroutines = "1.8.1"
