@@ -5,7 +5,8 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 
-internal expect fun Density.createBlurPaint(
+internal expect fun createBlurPaint(
+    density: Density,
     blurRadius: Dp,
     color: Color,
 ): Paint

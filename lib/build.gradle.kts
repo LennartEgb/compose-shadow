@@ -12,9 +12,6 @@ plugins {
 }
 
 kotlin {
-    compilerOptions {
-        freeCompilerArgs.add("-Xcontext-receivers")
-    }
     explicitApi()
 
     androidTarget()
@@ -96,4 +93,3 @@ publishing {
 mavenPublishing {
     coordinates("dev.lennartegb.compose", "shadow", "0.1.0")
 }
-
