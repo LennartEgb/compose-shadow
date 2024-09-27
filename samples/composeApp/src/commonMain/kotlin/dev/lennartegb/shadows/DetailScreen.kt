@@ -270,7 +270,7 @@ private fun ControlsSheet(
                 dp = spreadRadius,
                 onDpChange = state::spread,
                 max = maxBoxSize,
-                min = 0.dp
+                min = 0.dp,
             )
 
             colorPicker(color, onShadowColorChange)
