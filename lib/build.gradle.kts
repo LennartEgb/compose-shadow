@@ -75,8 +75,8 @@ publishing {
             name = "githubPackages"
             url = uri("https://maven.pkg.github.com/lennartegb/compose-shadow")
             credentials {
-                username = localProperties["githubPackagesUsername"] as? String
-                password = localProperties["githubPackagesPassword"] as? String
+                username = localProperties.getProperty("githubPackagesUsername")
+                password = localProperties.getProperty("githubPackagesPassword")
             }
         }
     }
