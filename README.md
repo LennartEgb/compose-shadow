@@ -49,7 +49,7 @@ and add the dependency to the module level `build.gradle.kts`
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("dev.lennartegb.compose:shadow:0.1.0")
+            implementation("dev.lennartegb.compose:shadow:0.1.1")
         }
     }
 }
