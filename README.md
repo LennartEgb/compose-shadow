@@ -38,6 +38,10 @@ dependencyResolutionManagement {
     repositories {
         maven {
             url = uri("https://maven.pkg.github.com/LennartEgb/compose-shadow")
+            credentials {
+                username = <GITHUB-USERNAME>
+                password = <GITHUB-TOKEN>
+            }
         }
     }
 }
