@@ -11,7 +11,7 @@ kotlinx-coroutines = "1.10.2"
 binary-compatibility-validator = "0.17.0"
 windowSizeClass = "0.5.0"
 colorpicker = "1.1.2"
-ktlint = "12.2.0"
+ktlint = "12.3.0"
 publish = "0.32.0"
 
 [libraries]
