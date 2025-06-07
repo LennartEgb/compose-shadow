@@ -32,6 +32,7 @@ import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,20 +57,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import dev.lennartegb.shadows.icons.Close
+import dev.lennartegb.shadows.icons.DarkMode
+import dev.lennartegb.shadows.icons.LightMode
 import dev.lennartegb.shadows.icons.Menu
 import dev.lennartegb.shadows.icons.ShadowIcons
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Preview
 @Composable
-fun DetailScreen(modifier: Modifier = Modifier) {
-    val appState = rememberAppState()
+internal fun DetailScreen(
+    appState: AppState,
+    modifier: Modifier = Modifier,
+) {
     val listState = rememberLazyListState()
     var changesBoxColor by remember { mutableStateOf(false) }
     var changesShadowColor by remember { mutableStateOf(false) }
@@ -93,6 +99,16 @@ fun DetailScreen(modifier: Modifier = Modifier) {
                     .boxShadow(appState.shadowValues)
                     .background(appState.boxValues.color, shape = appState.boxValues.shape),
             )
+
+            FloatingActionButton(
+                modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+                onClick = appState::toggleTheme,
+            ) {
+                Icon(
+                    imageVector = if (appState.isDarkTheme) ShadowIcons.DarkMode else ShadowIcons.LightMode,
+                    contentDescription = null,
+                )
+            }
         }
     }
 
@@ -185,7 +201,10 @@ fun PaneScaffold(
                     Column(horizontalAlignment = Alignment.End) {
                         IconButton(onClick = { controlsExpanded = !controlsExpanded }) {
                             AnimatedContent(controlsExpanded) {
-                                Icon(if (it) ShadowIcons.Close else ShadowIcons.Menu, contentDescription = null)
+                                Icon(
+                                    if (it) ShadowIcons.Close else ShadowIcons.Menu,
+                                    contentDescription = null
+                                )
                             }
                         }
 
@@ -200,7 +219,10 @@ fun PaneScaffold(
         }
 
         WindowWidthSizeClass.Expanded -> {
-            Row(modifier = modifier.background(background), horizontalArrangement = Arrangement.SpaceEvenly) {
+            Row(
+                modifier = modifier.background(background),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxHeight().widthIn(max = maxWidthControls),
                     color = controlsBackground,
@@ -263,7 +285,13 @@ private fun ControlsSheet(
 
         title(text = "Shadow")
         with(state.shadowValues) {
-            dpSliderSection("Blur Radius", dp = blurRadius, onDpChange = state::blur, max = maxBoxSize, min = 0.dp)
+            dpSliderSection(
+                "Blur Radius",
+                dp = blurRadius,
+                onDpChange = state::blur,
+                max = maxBoxSize,
+                min = 0.dp
+            )
             dpSliderSection(
                 "Spread Radius",
                 dp = spreadRadius,
@@ -331,7 +359,13 @@ private fun LazyListScope.colorPicker(color: Color, onColorChange: () -> Unit) =
     }
 }
 
-private fun LazyListScope.dpSliderSection(title: String, dp: Dp, onDpChange: (Dp) -> Unit, min: Dp, max: Dp) = item {
+private fun LazyListScope.dpSliderSection(
+    title: String,
+    dp: Dp,
+    onDpChange: (Dp) -> Unit,
+    min: Dp,
+    max: Dp,
+) = item {
     DpSliderSection(title = title, dp = dp, onDpChange = onDpChange, min = min, max = max)
 }
 
@@ -355,7 +389,12 @@ fun ShapeSelectorSection(
 }
 
 @Composable
-fun SwitchSection(title: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit, modifier: Modifier = Modifier) {
+fun SwitchSection(
+    title: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
         modifier = modifier,
         horizontalArrangement = SpaceBetween,
@@ -367,7 +406,14 @@ fun SwitchSection(title: String, checked: Boolean, onCheckedChange: (Boolean) ->
 }
 
 @Composable
-fun DpSliderSection(title: String, dp: Dp, onDpChange: (Dp) -> Unit, min: Dp, max: Dp, modifier: Modifier = Modifier) {
+fun DpSliderSection(
+    title: String,
+    dp: Dp,
+    onDpChange: (Dp) -> Unit,
+    min: Dp,
+    max: Dp,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier) {
         Text(title)
         DpSlider(dp, onDpChange, min = min, max = max)

@@ -1,6 +1,5 @@
 package dev.lennartegb.shadows
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -12,11 +11,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
+    val state = rememberAppState()
     MaterialTheme(
-        colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme(),
+        colorScheme = if (state.isDarkTheme) darkColorScheme() else lightColorScheme(),
         shapes = MaterialTheme.shapes,
         typography = MaterialTheme.typography,
     ) {
-        DetailScreen(modifier = Modifier.fillMaxSize())
+        DetailScreen(modifier = Modifier.fillMaxSize(), appState = state)
     }
 }

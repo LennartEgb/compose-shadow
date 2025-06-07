@@ -1,5 +1,6 @@
 package dev.lennartegb.shadows
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -14,12 +15,12 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun rememberAppState(): AppState {
-    return remember { AppState() }
+internal fun rememberAppState(isDarkTheme: Boolean = isSystemInDarkTheme()): AppState {
+    return remember { AppState(isDarkTheme = isDarkTheme) }
 }
 
 @Stable
-internal class AppState(shadowValues: ShadowValues = DefaultShadowValues) {
+internal class AppState(isDarkTheme: Boolean, shadowValues: ShadowValues = DefaultShadowValues) {
 
     private companion object {
         val DefaultShadowValues = ShadowValues(
@@ -39,10 +40,17 @@ internal class AppState(shadowValues: ShadowValues = DefaultShadowValues) {
         )
     }
 
+    var isDarkTheme: Boolean by mutableStateOf(isDarkTheme)
+        private set
+
     var boxValues by mutableStateOf(DefaultBoxValues)
         private set
     var shadowValues by mutableStateOf(shadowValues)
         private set
+
+    fun toggleTheme() {
+        isDarkTheme = !isDarkTheme
+    }
 
     fun blur(dp: Dp) {
         shadowValues = shadowValues.copy(blurRadius = dp)
