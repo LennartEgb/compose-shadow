@@ -1,0 +1,46 @@
+name: Deploy WasmJS App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read  # Required to fetch the repository content
+  pages: write    # Allow deployment to GitHub Pages
+  id-token: write # Required by actions/configure-pages
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "✔︎ Checkout"
+        uses: actions/checkout@v4
+
+      - name: "⚙️ Set up JDK 21"
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: "⚙️ Setup Gradle"
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.9
+
+      - name: "🛠️ Build WasmJS App"
+        run: gradle :samples:composeApp:wasmJsBrowserDistribution
+
+      - name: "📄 Configure GitHub Pages"
+        uses: actions/configure-pages@v5
+
+      - name: "📤 Upload GitHub Pages artifact"
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./samples/composeApp/build/dist/wasmJs/productionExecutable
+
+      - name: "🚀 Deploy to GitHub Pages"
+        id: deployment
+        uses: actions/deploy-pages@v4
