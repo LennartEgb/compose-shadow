@@ -28,9 +28,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
@@ -64,6 +61,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
+import dev.lennartegb.shadows.icons.Close
+import dev.lennartegb.shadows.icons.Menu
+import dev.lennartegb.shadows.icons.ShadowIcons
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Preview
@@ -185,8 +185,7 @@ fun PaneScaffold(
                     Column(horizontalAlignment = Alignment.End) {
                         IconButton(onClick = { controlsExpanded = !controlsExpanded }) {
                             AnimatedContent(controlsExpanded) {
-                                val icon = if (it) Icons.Default.Close else Icons.Default.Menu
-                                Icon(icon, contentDescription = null)
+                                Icon(if (it) ShadowIcons.Close else ShadowIcons.Menu, contentDescription = null)
                             }
                         }
 
