@@ -1,5 +1,7 @@
+@file:OptIn(ExperimentalWasmDsl::class)
+
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import java.util.*
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -17,6 +19,10 @@ kotlin {
     androidTarget()
 
     jvm()
+
+    wasmJs {
+        browser()
+    }
 
     listOf(
         iosX64(),
