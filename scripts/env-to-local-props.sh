@@ -8,14 +8,16 @@ if [ -f "$FILE" ]; then
 fi
 
 check_env_var() {
-    if [ -z "${!1}" ]; then
-        echo "Error: $1 environment variable is not set."
+    local var_value=$1
+    local var_name=$2
+    if [ -z "$var_value" ]; then
+        echo "Error: $var_name environment variable is not set."
         exit 1
     fi
 }
 
-check_env_var "GITHUB_USERNAME"
-check_env_var "GITHUB_PASSWORD"
+check_env_var "$GITHUB_USERNAME" "GITHUB_USERNAME"
+check_env_var "$GITHUB_PASSWORD" "GITHUB_PASSWORD"
 
 echo "Creating $FILE..."
 
