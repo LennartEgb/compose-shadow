@@ -57,7 +57,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -203,7 +202,7 @@ fun PaneScaffold(
                             AnimatedContent(controlsExpanded) {
                                 Icon(
                                     if (it) ShadowIcons.Close else ShadowIcons.Menu,
-                                    contentDescription = null
+                                    contentDescription = null,
                                 )
                             }
                         }
@@ -221,7 +220,7 @@ fun PaneScaffold(
         WindowWidthSizeClass.Expanded -> {
             Row(
                 modifier = modifier.background(background),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 Surface(
                     modifier = Modifier.fillMaxHeight().widthIn(max = maxWidthControls),
@@ -290,7 +289,7 @@ private fun ControlsSheet(
                 dp = blurRadius,
                 onDpChange = state::blur,
                 max = maxBoxSize,
-                min = 0.dp
+                min = 0.dp,
             )
             dpSliderSection(
                 "Spread Radius",
