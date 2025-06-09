@@ -1,8 +1,8 @@
 # compose-shadow
 
 <p align="center">
-    <img src="art/shadow.png" alt="shadow" width="200">
-    <img src="art/shadow-inset.png" alt="shadow-inset" width="200">
+    <img src="art/shadow.png" alt="shadow" width="214">
+    <img src="art/shadow-inset.png" alt="shadow-inset" width="214">
 </p>
 
 A compose multiplatform library to support drawing css style box-shadows.
@@ -53,7 +53,7 @@ and add the dependency to the module level `build.gradle.kts`
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("dev.lennartegb.compose:shadow:0.1.2")
+            implementation("dev.lennartegb.compose:shadow:0.1.3")
         }
     }
 }
