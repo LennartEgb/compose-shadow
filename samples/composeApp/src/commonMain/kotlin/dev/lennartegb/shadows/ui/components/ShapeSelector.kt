@@ -1,4 +1,4 @@
-package dev.lennartegb.shadows
+package dev.lennartegb.shadows.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.DrawStyle
@@ -26,9 +28,10 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ShapeSelector(
+internal fun ShapeSelector(
     selected: Shape,
     shapes: List<Shape>,
     onShapeSelect: (Shape) -> Unit,
@@ -51,9 +54,7 @@ fun ShapeSelector(
                 strokeWidth = strokeWidth,
             )
             if (index != shapes.lastIndex) {
-                Box(
-                    modifier = Modifier.width(strokeWidth).height(24.dp).background(color),
-                )
+                Box(modifier = Modifier.width(strokeWidth).height(24.dp).background(color))
             }
         }
     }
@@ -70,8 +71,16 @@ private fun ShapeItem(
     val layoutDirection = LocalLayoutDirection.current
     Canvas(modifier = modifier) {
         val density = Density(density = density, fontScale = fontScale)
-        val outline = shape.createOutline(size, layoutDirection = layoutDirection, density = density)
+        val outline =
+            shape.createOutline(size, layoutDirection = layoutDirection, density = density)
         val style: DrawStyle = if (selected) Fill else Stroke((strokeWidth * 2).toPx())
         drawOutline(outline = outline, color = color, style = style)
     }
+}
+
+@Preview
+@Composable
+private fun ShapeSelector() {
+    val shapes = listOf(CircleShape, RectangleShape, RoundedCornerShape(8.dp))
+    ShapeSelector(selected = shapes.first(), shapes = shapes, onShapeSelect = { })
 }

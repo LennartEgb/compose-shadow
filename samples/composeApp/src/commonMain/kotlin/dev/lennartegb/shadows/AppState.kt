@@ -20,7 +20,7 @@ internal fun rememberAppState(isDarkTheme: Boolean = isSystemInDarkTheme()): App
 }
 
 @Stable
-internal class AppState(isDarkTheme: Boolean, shadowValues: ShadowValues = DefaultShadowValues) {
+internal class AppState(isDarkTheme: Boolean) {
 
     private companion object {
         val DefaultShadowValues = ShadowValues(
@@ -45,7 +45,7 @@ internal class AppState(isDarkTheme: Boolean, shadowValues: ShadowValues = Defau
 
     var boxValues by mutableStateOf(DefaultBoxValues)
         private set
-    var shadowValues by mutableStateOf(shadowValues)
+    var shadowValues by mutableStateOf(DefaultShadowValues)
         private set
 
     fun toggleTheme() {
