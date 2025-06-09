@@ -89,5 +89,5 @@ publishing {
 }
 
 mavenPublishing {
-    coordinates("dev.lennartegb.compose", "shadow", "0.1.2")
+    coordinates("dev.lennartegb.compose", "shadow", "0.1.3")
 }
