@@ -81,7 +81,11 @@ internal class AppState(isDarkTheme: Boolean, shadowValues: ShadowValues = Defau
     }
 
     fun shadowColor(color: Color) {
-        shadowValues = shadowValues.copy(color = color)
+        shadowValues = shadowValues.copy(color = color.copy(alpha = shadowValues.color.alpha))
+    }
+
+    fun shadowAlpha(value: Float) {
+        shadowValues = shadowValues.copy(color = shadowValues.color.copy(alpha = value))
     }
 
     fun boxWidth(dp: Dp) {
@@ -97,6 +101,10 @@ internal class AppState(isDarkTheme: Boolean, shadowValues: ShadowValues = Defau
     }
 
     fun boxColor(color: Color) {
-        boxValues = boxValues.copy(color = color)
+        boxValues = boxValues.copy(color = color.copy(alpha = boxValues.color.alpha))
+    }
+
+    fun boxAlpha(value: Float) {
+        boxValues = boxValues.copy(color = boxValues.color.copy(alpha = value))
     }
 }

@@ -37,6 +37,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -75,7 +76,6 @@ internal fun DetailScreen(
     appState: AppState,
     modifier: Modifier = Modifier,
 ) {
-    val listState = rememberLazyListState()
     var changesBoxColor by remember { mutableStateOf(false) }
     var changesShadowColor by remember { mutableStateOf(false) }
 
@@ -84,7 +84,6 @@ internal fun DetailScreen(
         controls = {
             ControlsSheet(
                 state = appState,
-                listState = listState,
                 contentPadding = PaddingValues(16.dp),
                 onBoxColorChange = { changesBoxColor = true },
                 onShadowColorChange = { changesShadowColor = true },
@@ -278,6 +277,12 @@ private fun ControlsSheet(
             }
 
             colorPicker(color, onBoxColorChange)
+            item {
+                Slider(
+                    value = color.alpha,
+                    onValueChange = state::boxAlpha,
+                )
+            }
         }
 
         divider()
@@ -300,6 +305,12 @@ private fun ControlsSheet(
             )
 
             colorPicker(color, onShadowColorChange)
+            item {
+                Slider(
+                    value = color.alpha,
+                    onValueChange = state::shadowAlpha,
+                )
+            }
 
             item {
                 val maxOffset = 50.dp
