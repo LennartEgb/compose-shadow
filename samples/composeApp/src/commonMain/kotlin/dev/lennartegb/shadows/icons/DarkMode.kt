@@ -12,7 +12,7 @@ val ShadowIcons.DarkMode: ImageVector by lazy(LazyThreadSafetyMode.NONE) {
         defaultWidth = 24.dp,
         defaultHeight = 24.dp,
         viewportWidth = 960f,
-        viewportHeight = 960f
+        viewportHeight = 960f,
     ).apply {
         path(fill = SolidColor(Color(0xFFE3E3E3))) {
             moveTo(480f, 840f)
