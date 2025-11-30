@@ -15,9 +15,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun rememberAppState(isDarkTheme: Boolean = isSystemInDarkTheme()): AppState {
-    return remember { AppState(isDarkTheme = isDarkTheme) }
-}
+internal fun rememberAppState(isDarkTheme: Boolean = isSystemInDarkTheme()): AppState = remember { AppState(isDarkTheme = isDarkTheme) }
 
 @Stable
 internal class AppState(isDarkTheme: Boolean) {
