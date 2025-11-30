@@ -13,13 +13,11 @@ internal actual fun createBlurPaint(
     density: Density,
     blurRadius: Dp,
     color: Color,
-): Paint {
-    return Paint().asFrameworkPaint().apply {
-        if (blurRadius.value > 0f) {
-            val style = Blur.NORMAL
-            val radiusPx = with(density) { blurRadius.toPx() }
-            this.maskFilter = BlurMaskFilter(radiusPx, style)
-        }
-        this.color = color.toArgb()
-    }.asComposePaint()
-}
+): Paint = Paint().asFrameworkPaint().apply {
+    if (blurRadius.value > 0f) {
+        val style = Blur.NORMAL
+        val radiusPx = with(density) { blurRadius.toPx() }
+        this.maskFilter = BlurMaskFilter(radiusPx, style)
+    }
+    this.color = color.toArgb()
+}.asComposePaint()
