@@ -1,3 +1,5 @@
+> Customizable shadows are now supported in Kotlin Multiplatform: https://kotlinlang.org/docs/multiplatform/whats-new-compose-190.html#customizable-shadows
+
 # compose-shadow
 
 <p align="center">
